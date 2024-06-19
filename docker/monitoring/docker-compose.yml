@@ -1,0 +1,35 @@
+version: "3.2"
+services:
+  prometheus:
+    image: "prom/prometheus"
+    restart: "no"
+    user: "root"
+    volumes:
+      - $PWD/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - $PWD/monitoring/prometheus/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml:ro
+    ports:
+      - "9090:9090"
+  node_exporter:
+    image: "quay.io/prometheus/node-exporter"
+    restart: "no"
+    user: "root"
+    pid: "host"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+  grafana:
+    image: "grafana/grafana:latest"
+    restart: "no"
+    user: "root"
+    volumes:
+      - $PWD/monitoring/grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"

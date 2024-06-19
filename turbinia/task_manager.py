@@ -74,6 +74,8 @@ turbinia_jobs_completed_total = Counter(
     'turbinia_jobs_completed_total', 'Total number jobs resolved')
 turbinia_server_request_total = Counter(
     'turbinia_server_request_total', 'Total number of requests received.')
+turbinia_server_request_completed_total = Counter(
+    'turbinia_request_completed_total', 'Total number of completed requests.')
 turbinia_server_task_timeout_total = Counter(
     'turbinia_server_task_timeout_total',
     'Total number of Tasks that have timed out on the Server.')
@@ -579,6 +581,7 @@ class BaseTaskManager:
     # request since everything is complete.
     elif request_done and request_finalized:
       self.remove_jobs(request_id)
+      turbinia_server_request_completed_total.inc()
 
   def process_tasks(self):
     """Process any tasks that need to be processed.

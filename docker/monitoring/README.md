@@ -1,0 +1,1 @@
+docker-compose -f ./docker/monitoring/docker-compose.yml up

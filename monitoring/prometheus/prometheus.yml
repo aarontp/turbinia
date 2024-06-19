@@ -1,0 +1,15 @@
+global:
+  scrape_interval:     60s
+  external_labels:
+    environment: "turbinia_infra"
+
+scrape_configs:
+  - job_name: turbinia_lab_application_metrics
+    static_configs:
+            - targets: ['localhost:9200']
+  - job_name: turbinia_lab_os_metrics
+    static_configs:
+      - targets: ['localhost:9100']
+
+rule_files:
+  - "/etc/prometheus/prometheus.rules.yml"
